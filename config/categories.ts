@@ -32,7 +32,7 @@ export const categoriesConfig = [
   {
     slug: 'marvel',
     label: 'Marvel',
-    imageUrl: 'ΒΑΛΕ_ΕΔΩ_ΤΟ_ΔΙΚΟ_ΣΟΥ_MARVEL_URL.png',
+    imageUrl: 'https://res.cloudinary.com/dez5060kz/image/upload/v1772234087/marvel_dgfsj6.png',
     description: 'Comic and cinematic signatures.'
   }
 ] as const;
