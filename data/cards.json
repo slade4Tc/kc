@@ -45,7 +45,7 @@
   "serial": "PSA-117783810",
   "tags": ["Soccer", "LaLiga", "Adrenalyn XL", "Panini", "Autograph", "Premium", "PSA 10", "FC Barcelona"],
   "notes": ["PSA GEM MT 10", "Autógrafo Original Premium insert", "Top modern Barcelona chase"],
-  "frontImage": "PUT_YOUR_CLOUDINARY_IMAGE_URL_HERE",
+  "frontImage": "https://res.cloudinary.com/dez5060kz/image/upload/v1772234740/yamal_k4afno.png",
   "description": "2023–24 Adrenalyn XL LaLiga Lamine Yamal Autógrafo Original Premium, graded PSA 10 — premium auto chase.",
   "updatedAt": "2026-02-28T00:00:00.000Z",
   "featuredRank": 4
