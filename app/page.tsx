@@ -3,19 +3,20 @@
 import { motion } from 'framer-motion';
 import { Hero } from '@/components/Hero';
 import { FeaturedSection } from '@/components/FeaturedSection';
+import { FeaturedGrailsHero } from '@/components/FeaturedGrailsHero';
 import { CategorySection } from '@/components/CategorySection';
 import { fadeUp } from '@/lib/motion';
-import { getCategoryCounts, getFeaturedCards, getNewestCards } from '@/lib/cards';
+import { getCategoryCounts, getFeaturedHeroCards, getNewestCards } from '@/lib/cards';
 
 export default function HomePage() {
-  const featured = getFeaturedCards();
+  const featuredHeroCards = getFeaturedHeroCards();
   const categories = getCategoryCounts();
   const newest = getNewestCards();
 
   return (
     <>
       <Hero />
-      <FeaturedSection cards={featured} title="Featured Grails" panel />
+      <FeaturedGrailsHero cards={featuredHeroCards} />
       <CategorySection categories={categories} />
 
       <section className="py-14 sm:py-16">

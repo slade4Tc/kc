@@ -37,6 +37,22 @@ export function getFeaturedCards() {
   return cards.filter((card) => card.featured).slice(0, 6);
 }
 
+export function getFeaturedHeroCards() {
+  const prioritized = cards
+    .filter((card) => card.featured && (card.status === 'available' || card.status === 'showcase'))
+    .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt));
+
+  if (prioritized.length >= 4) return prioritized.slice(0, 4);
+
+  const fallback = cards
+    .filter((card) => card.status === 'available' || card.status === 'showcase')
+    .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt));
+
+  const merged = [...prioritized, ...fallback.filter((card) => !prioritized.some((p) => p.id === card.id))];
+
+  return merged.slice(0, 4);
+}
+
 export function getNewestCards() {
   return [...cards].sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt)).slice(0, 6);
 }
