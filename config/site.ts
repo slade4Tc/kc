@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'KC Vault',
+  name: 'KROBA CARDS',
   description: 'Boutique Collector Gallery',
   email: 'vault@kcgallery.com',
   instagram: 'https://instagram.com/kcvault.gallery',
