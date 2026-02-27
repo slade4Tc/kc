@@ -16,7 +16,7 @@
     "description": "Championship-era signature with sharp chrome finish.",
     "notes": ["Serial verified", "Archive sleeve", "Vault-kept"],
     "updatedAt": "2026-02-14T10:00:00.000Z",
-    "featured": true
+    "featuredRank": 1
   },
   {
     "id": "KC-002",
@@ -25,7 +25,7 @@
     "subtitle": "Heritage On-card Auto",
     "category": "soccer",
     "year": 2023,
-    "status": "showcase",
+    "status": "available",
     "grade": "BGS 9.5",
     "frontImage": "https://res.cloudinary.com/demo/image/upload/v1690002003/cards/soccer-1.jpg",
     "gallery": [
@@ -35,7 +35,7 @@
     "description": "Museum-caliber piece with exceptional eye appeal.",
     "notes": ["Subgrades strong", "Display selected"],
     "updatedAt": "2026-02-20T12:30:00.000Z",
-    "featured": true
+    "featuredRank": 2
   },
   {
     "id": "KC-003",
@@ -54,7 +54,7 @@
     "description": "High-demand release from a defining modern run.",
     "notes": ["Archived listing", "Private placement"],
     "updatedAt": "2026-01-19T11:10:00.000Z",
-    "featured": true
+    "featuredRank": 3
   },
   {
     "id": "KC-004",
@@ -73,7 +73,7 @@
     "description": "Classic insert from one of the most iconic eras.",
     "notes": ["Surface clean", "Strong gloss"],
     "updatedAt": "2026-02-11T09:45:00.000Z",
-    "featured": false
+    "featuredRank": 4
   },
   {
     "id": "KC-005",
@@ -82,7 +82,7 @@
     "subtitle": "Carbon Foil Parallel",
     "category": "f1",
     "year": 2024,
-    "status": "showcase",
+    "status": "available",
     "grade": "PSA 10",
     "frontImage": "https://res.cloudinary.com/demo/image/upload/v1690002009/cards/f1-3.jpg",
     "gallery": [
@@ -92,7 +92,7 @@
     "description": "Carbon finish and clean centering make this a display favorite.",
     "notes": ["Case mint", "Current showcase wall"],
     "updatedAt": "2026-02-24T09:00:00.000Z",
-    "featured": true
+    "featuredRank": 5
   },
   {
     "id": "KC-006",
@@ -111,7 +111,7 @@
     "description": "Low-pop refractor with rich color and sharp edges.",
     "notes": ["Centering verified", "Fresh slab"],
     "updatedAt": "2026-02-26T11:15:00.000Z",
-    "featured": false
+    "featuredRank": 6
   },
   {
     "id": "KC-007",
@@ -130,7 +130,7 @@
     "description": "Modern rookie staple with outstanding print quality.",
     "notes": ["No edge lift", "Archive tracked"],
     "updatedAt": "2026-02-21T17:05:00.000Z",
-    "featured": false
+    "featuredRank": 7
   },
   {
     "id": "KC-008",
@@ -139,7 +139,7 @@
     "subtitle": "Convention Signature Edition",
     "category": "entertainment",
     "year": 2025,
-    "status": "showcase",
+    "status": "available",
     "grade": "PSA 9",
     "frontImage": "https://res.cloudinary.com/demo/image/upload/v1690002015/cards/ent-1.jpg",
     "gallery": [
@@ -149,7 +149,7 @@
     "description": "A centerpiece crossover from the entertainment vault.",
     "notes": ["Authenticated event release", "Display-only rotation"],
     "updatedAt": "2026-02-27T07:25:00.000Z",
-    "featured": true
+    "featuredRank": 8
   },
   {
     "id": "KC-009",
@@ -167,8 +167,7 @@
     ],
     "description": "Coveted foil treatment and iconic player heritage.",
     "notes": ["Condition report logged", "Fulfilled via inquiry"],
-    "updatedAt": "2026-02-05T13:50:00.000Z",
-    "featured": false
+    "updatedAt": "2026-02-05T13:50:00.000Z"
   },
   {
     "id": "KC-010",
@@ -177,7 +176,7 @@
     "subtitle": "Vault Showcase Exclusive",
     "category": "showcase",
     "year": 2026,
-    "status": "showcase",
+    "status": "available",
     "grade": "BGS 10",
     "frontImage": "https://res.cloudinary.com/demo/image/upload/v1690002019/cards/showcase-1.jpg",
     "gallery": [
@@ -186,7 +185,6 @@
     ],
     "description": "Reserved showcase piece with concierge inquiry access.",
     "notes": ["Display archive", "Priority waitlist"],
-    "updatedAt": "2026-02-28T19:40:00.000Z",
-    "featured": true
+    "updatedAt": "2026-02-28T19:40:00.000Z"
   }
 ]

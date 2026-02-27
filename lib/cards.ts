@@ -8,15 +8,14 @@ type RawCard = Omit<Card, 'status' | 'category'> & { status?: string; category?:
 
 function normalizeStatus(status?: string): CardStatus {
   const value = (status ?? '').toLowerCase().trim();
-  if (value === 'available' || value === 'showcase' || value === 'sold') return value;
-  if (!value || value === 'unknown') return 'available';
-  return 'showcase';
+  if (value === 'sold') return 'sold';
+  // showcase or unknown values normalize to available
+  return 'available';
 }
 
 function normalizeCategory(category?: string): CardCategory {
   const value = (category ?? '').toLowerCase().trim();
-  if (categorySet.has(value as CardCategory)) return value as CardCategory;
-  return 'showcase';
+  return categorySet.has(value as CardCategory) ? (value as CardCategory) : 'showcase';
 }
 
 const cards: Card[] = (cardsData as RawCard[]).map((card) => ({
@@ -34,23 +33,19 @@ export function getCardById(id: string) {
 }
 
 export function getFeaturedCards() {
-  return cards.filter((card) => card.featured).slice(0, 6);
-}
+  const ranked = [...cards]
+    .filter((card) => typeof card.featuredRank === 'number' && card.featuredRank >= 1 && card.featuredRank <= 8)
+    .sort((a, b) => (a.featuredRank ?? 99) - (b.featuredRank ?? 99))
+    .slice(0, 8);
 
-export function getFeaturedHeroCards() {
-  const prioritized = cards
-    .filter((card) => card.featured && (card.status === 'available' || card.status === 'showcase'))
-    .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt));
+  if (ranked.length === 8) return ranked;
 
-  if (prioritized.length >= 4) return prioritized.slice(0, 4);
+  const fill = [...cards]
+    .filter((card) => card.status === 'available' && !ranked.some((item) => item.id === card.id))
+    .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt))
+    .slice(0, 8 - ranked.length);
 
-  const fallback = cards
-    .filter((card) => card.status === 'available' || card.status === 'showcase')
-    .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt));
-
-  const merged = [...prioritized, ...fallback.filter((card) => !prioritized.some((p) => p.id === card.id))];
-
-  return merged.slice(0, 4);
+  return [...ranked, ...fill].slice(0, 8);
 }
 
 export function getNewestCards() {
@@ -71,24 +66,16 @@ export function filterCards(input: Card[], filters: CardFilters) {
       if (filters.grade !== 'all' && card.grade !== filters.grade) return false;
       return true;
     })
-    .sort((a, b) => {
-      if (filters.sort === 'title-asc') return a.name.localeCompare(b.name);
-      return +new Date(b.updatedAt) - +new Date(a.updatedAt);
-    });
+    .sort((a, b) => (filters.sort === 'title-asc' ? a.name.localeCompare(b.name) : +new Date(b.updatedAt) - +new Date(a.updatedAt)));
 }
 
 export function getCategoryCounts() {
   return categoryConfig.map((category) => ({
     ...category,
-    count:
-      category.slug === 'showcase'
-        ? cards.filter((card) => card.status === 'showcase').length
-        : cards.filter((card) => card.category === category.slug).length
+    count: cards.filter((card) => card.category === category.slug).length
   }));
 }
 
-export function getCardsForCollectionSlug(slug: string) {
-  if (slug === 'showcase') return cards.filter((card) => card.status === 'showcase');
-  if (categorySet.has(slug as CardCategory)) return cards.filter((card) => card.category === slug);
-  return [];
+export function getCollectionCards(slug: string) {
+  return cards.filter((card) => card.category === slug);
 }

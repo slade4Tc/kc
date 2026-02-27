@@ -1,4 +1,5 @@
 import { CollectionsView } from '@/components/CollectionsView';
+import { PageTransition } from '@/components/PageTransition';
 import { FilterState } from '@/components/FiltersBar';
 
 const initialFilters: FilterState = {
@@ -11,10 +12,12 @@ const initialFilters: FilterState = {
 
 export default function CollectionsPage() {
   return (
-    <CollectionsView
-      title="Collections"
-      description="Browse all inventory by category, status, grade, and latest additions."
-      initialFilters={initialFilters}
-    />
+    <PageTransition>
+      <CollectionsView
+        title="Collections"
+        description="Browse all inventory by category, status, grade, and latest additions."
+        initialFilters={initialFilters}
+      />
+    </PageTransition>
   );
 }

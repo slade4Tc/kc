@@ -39,7 +39,7 @@ export default function CardDetailPage({ params }: { params: { id: string } }) {
             <ul className="mt-3 space-y-2 text-sm text-stone-300">
               <li>Category: {card.category}</li>
               <li>Grade: {card.grade}</li>
-              <li>Status: {card.status}</li>
+              <li>Status: {card.status === 'available' ? 'Available' : 'Sold'}</li>
               <li>Year: {card.year}</li>
             </ul>
           </details>

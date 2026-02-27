@@ -18,13 +18,6 @@ interface FiltersBarProps {
   onOpenMobile: () => void;
 }
 
-const statusOptions: { value: FilterState['status']; label: string }[] = [
-  { value: 'all', label: 'All status' },
-  { value: 'available', label: 'Available' },
-  { value: 'showcase', label: 'Showcase' },
-  { value: 'sold', label: 'Sold' }
-];
-
 export function FiltersBar({ filters, categories, grades, onChange, onOpenMobile }: FiltersBarProps) {
   return (
     <>
@@ -55,11 +48,9 @@ export function FiltersBar({ filters, categories, grades, onChange, onOpenMobile
           onChange={(e) => onChange({ ...filters, status: e.target.value as FilterState['status'] })}
           className="rounded-xl border border-white/10 bg-[#161616] px-3 py-2 text-sm"
         >
-          {statusOptions.map((status) => (
-            <option key={status.value} value={status.value}>
-              {status.label}
-            </option>
-          ))}
+          <option value="all">All status</option>
+          <option value="available">Available</option>
+          <option value="sold">Sold</option>
         </select>
         <select
           value={filters.grade}
@@ -79,7 +70,7 @@ export function FiltersBar({ filters, categories, grades, onChange, onOpenMobile
           className="rounded-xl border border-white/10 bg-[#161616] px-3 py-2 text-sm"
         >
           <option value="newest">Newest</option>
-          <option value="title-asc">Title A-Z</option>
+          <option value="title-asc">Title</option>
         </select>
       </div>
     </>

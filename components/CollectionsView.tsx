@@ -13,6 +13,14 @@ interface CollectionsViewProps {
   initialFilters: FilterState;
 }
 
+const blankFilters: FilterState = {
+  search: '',
+  category: 'all',
+  status: 'all',
+  grade: 'all',
+  sort: 'newest'
+};
+
 export function CollectionsView({ title, description, initialFilters }: CollectionsViewProps) {
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [open, setOpen] = useState(false);
@@ -26,11 +34,11 @@ export function CollectionsView({ title, description, initialFilters }: Collecti
     filters.category !== 'all' ? { key: 'category', label: `Category: ${filters.category}` } : null,
     filters.status !== 'all' ? { key: 'status', label: `Status: ${filters.status}` } : null,
     filters.grade !== 'all' ? { key: 'grade', label: `Grade: ${filters.grade}` } : null,
-    filters.sort !== 'newest' ? { key: 'sort', label: 'Sort: Title A-Z' } : null
+    filters.sort !== 'newest' ? { key: 'sort', label: 'Sort: Title' } : null
   ].filter(Boolean) as { key: keyof FilterState; label: string }[];
 
   const clearFilter = (key: keyof FilterState) => {
-    setFilters((prev) => ({ ...prev, [key]: initialFilters[key] }));
+    setFilters((prev) => ({ ...prev, [key]: blankFilters[key] }));
   };
 
   return (
@@ -47,7 +55,12 @@ export function CollectionsView({ title, description, initialFilters }: Collecti
       {!!chips.length && (
         <div className="mb-6 flex flex-wrap gap-2">
           {chips.map((chip) => (
-            <button key={chip.key} onClick={() => clearFilter(chip.key)} className="rounded-full border border-gold/30 bg-gold/10 px-3 py-1.5 text-xs text-gold">
+            <button
+              key={chip.key}
+              onClick={() => clearFilter(chip.key)}
+              className="rounded-full border border-gold/30 bg-gold/10 px-3 py-1.5 text-xs text-gold"
+              aria-label={chip.key === 'category' ? 'Clear category filter' : `Clear ${chip.key} filter`}
+            >
               {chip.label} ×
             </button>
           ))}
@@ -61,7 +74,7 @@ export function CollectionsView({ title, description, initialFilters }: Collecti
         value={filters}
         onClose={() => setOpen(false)}
         onApply={setFilters}
-        onClear={() => setFilters(initialFilters)}
+        onClear={() => setFilters(blankFilters)}
       />
     </section>
   );

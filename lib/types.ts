@@ -1,4 +1,4 @@
-export type CardStatus = 'available' | 'showcase' | 'sold';
+export type CardStatus = 'available' | 'sold';
 
 export type CardCategory = 'f1' | 'soccer' | 'baseball' | 'entertainment' | 'basketball' | 'showcase';
 
@@ -16,7 +16,7 @@ export interface Card {
   description: string;
   notes: string[];
   updatedAt: string;
-  featured: boolean;
+  featuredRank?: number;
 }
 
 export interface CardFilters {

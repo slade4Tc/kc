@@ -28,13 +28,7 @@ export function MobileFilterSheet({ open, categories, grades, value, onClose, on
     <AnimatePresence>
       {open && (
         <>
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 z-40 bg-black/60"
-          />
+          <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 z-40 bg-black/60" />
           <motion.div
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
@@ -44,12 +38,7 @@ export function MobileFilterSheet({ open, categories, grades, value, onClose, on
           >
             <p className="mb-4 text-sm uppercase tracking-[0.2em] text-stone-400">Filters</p>
             <div className="space-y-3">
-              <input
-                value={draft.search}
-                onChange={(e) => set('search', e.target.value)}
-                placeholder="Search title"
-                className="w-full rounded-xl border border-white/10 bg-transparent px-3 py-2 text-sm"
-              />
+              <input value={draft.search} onChange={(e) => set('search', e.target.value)} placeholder="Search title" className="w-full rounded-xl border border-white/10 bg-transparent px-3 py-2 text-sm" />
               <select value={draft.category} onChange={(e) => set('category', e.target.value as 'all' | CardCategory)} className="w-full rounded-xl border border-white/10 bg-[#161616] px-3 py-2 text-sm">
                 <option value="all">All categories</option>
                 {categories.map((category) => (
@@ -61,7 +50,6 @@ export function MobileFilterSheet({ open, categories, grades, value, onClose, on
               <select value={draft.status} onChange={(e) => set('status', e.target.value as 'all' | CardStatus)} className="w-full rounded-xl border border-white/10 bg-[#161616] px-3 py-2 text-sm">
                 <option value="all">All status</option>
                 <option value="available">Available</option>
-                <option value="showcase">Showcase</option>
                 <option value="sold">Sold</option>
               </select>
               <select value={draft.grade} onChange={(e) => set('grade', e.target.value)} className="w-full rounded-xl border border-white/10 bg-[#161616] px-3 py-2 text-sm">
@@ -74,7 +62,7 @@ export function MobileFilterSheet({ open, categories, grades, value, onClose, on
               </select>
               <select value={draft.sort} onChange={(e) => set('sort', e.target.value as FilterState['sort'])} className="w-full rounded-xl border border-white/10 bg-[#161616] px-3 py-2 text-sm">
                 <option value="newest">Newest</option>
-                <option value="title-asc">Title A-Z</option>
+                <option value="title-asc">Title</option>
               </select>
             </div>
             <div className="mt-5 flex gap-2">

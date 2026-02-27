@@ -6,17 +6,17 @@ import { FeaturedSection } from '@/components/FeaturedSection';
 import { FeaturedGrailsHero } from '@/components/FeaturedGrailsHero';
 import { CategorySection } from '@/components/CategorySection';
 import { fadeUp } from '@/lib/motion';
-import { getCategoryCounts, getFeaturedHeroCards, getNewestCards } from '@/lib/cards';
+import { getCategoryCounts, getFeaturedCards, getNewestCards } from '@/lib/cards';
 
 export default function HomePage() {
-  const featuredHeroCards = getFeaturedHeroCards();
+  const featuredCards = getFeaturedCards();
   const categories = getCategoryCounts();
   const newest = getNewestCards();
 
   return (
     <>
       <Hero />
-      <FeaturedGrailsHero cards={featuredHeroCards} />
+      <FeaturedGrailsHero cards={featuredCards} />
       <CategorySection categories={categories} />
 
       <section className="py-14 sm:py-16">
