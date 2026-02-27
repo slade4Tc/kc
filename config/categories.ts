@@ -29,7 +29,12 @@ export const categoryConfig = [
     image: 'https://res.cloudinary.com/dez5060kz/image/upload/v1772220437/vn1phbbhku1itqb6jglx_zdpq0e.webp',
     description: 'Rookies, signatures, and championship icons.'
   },
-
+  {
+    slug: 'showcase',
+    label: 'Showcase',
+    image: 'https://res.cloudinary.com/demo/image/upload/v1690001015/categories/showcase.jpg',
+    description: 'Display-selected highlights from the vault.'
+  }
 ] as const;
 
 export type CategorySlug = (typeof categoryConfig)[number]['slug'];
