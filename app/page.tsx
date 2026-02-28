@@ -37,7 +37,7 @@ export default function HomePage() {
 
       <FeaturedSection cards={newest} title="New Additions" />
 
-      <motion.section className="py-16" initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.35 }} variants={fadeUp}>
+      <motion.section className="py-16" initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.75 }} variants={fadeUp}>
         <div className="grid gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:grid-cols-2 md:p-10">
           <div className="space-y-4">
             <p className="text-xs uppercase tracking-[0.24em] text-gold">Collector Story</p>
