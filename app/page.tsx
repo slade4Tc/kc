@@ -77,7 +77,7 @@ export default function HomePage() {
         className="py-16"
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, amount: 1 }}
+        viewport={{ once: true, amount: 0.45 }}
         variants={fadeUp}
       >
         <div className="grid gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:grid-cols-2 md:p-10">
