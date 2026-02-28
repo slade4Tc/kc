@@ -47,7 +47,7 @@ export default function HomePage() {
 
       if (isDesktop) {
         // stronger side enter on desktop
-        const x = i === 0 ? -180 : i === 2 ? 180 : 0;
+        const x = i === 0 ? -260 : i === 2 ? 260 : 0;
         const y = i === 1 ? 18 : 6;
         return { opacity: 0, x, y };
       }
