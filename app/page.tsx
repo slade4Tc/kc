@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Hero } from '@/components/Hero';
 import { FeaturedSection } from '@/components/FeaturedSection';
@@ -14,37 +15,59 @@ export default function HomePage() {
   const newest = getNewestCards();
   const reduce = useReducedMotion();
 
+  // IMPORTANT: desktop detection should be correct on first client render
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(min-width: 768px)').matches;
+  });
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  // After the scroll animation finishes (desktop), we swap each card to a static <article>
+  // so text never stays blurred.
+  const [careSettled, setCareSettled] = useState<Record<string, boolean>>({});
+
   const careCards = [
     { title: 'Grading', desc: 'Every card is verified with matching serials and grading company records.' },
     { title: 'Storage', desc: 'Humidity-controlled, UV-safe handling from archive intake to shipment.' },
     { title: 'Shipping', desc: 'Double-boxed insured dispatch with signature confirmation worldwide.' }
   ] as const;
 
-  // Scroll-trigger “build up from sides” (no blur to avoid stuck-blur bug)
-  const careItem = {
-    hidden: (i: number) =>
-      reduce
-        ? { opacity: 0, y: 10 }
-        : {
-            opacity: 0,
-            y: 14,
-            // stronger slide so it feels like "from outside" on desktop too
-            x: i === 0 ? -120 : i === 2 ? 120 : 0
-          },
-    show: (i: number) =>
-      reduce
-        ? { opacity: 1, y: 0, transition: { duration: 0.3 } }
-        : {
-            opacity: 1,
-            y: 0,
-            x: 0,
-            transition: {
-              duration: 0.6,
-              ease: [0.22, 1, 0.36, 1],
-              delay: i * 0.08
-            }
+  // Scroll-trigger “build up from sides” (desktop) / gentle fade-up (mobile)
+  const careItem = useMemo(() => {
+    return {
+      hidden: (i: number) => {
+        if (reduce) return { opacity: 0, y: 10 };
+
+        // Mobile stays simple (already perfect for you)
+        if (!isDesktop) return { opacity: 0, y: 16 };
+
+        // Desktop comes clearly from outside
+        const x = i === 0 ? -240 : i === 2 ? 240 : 0;
+        return { opacity: 0, y: 18, x };
+      },
+      show: (i: number) => {
+        if (reduce) return { opacity: 1, y: 0, x: 0, transition: { duration: 0.3 } };
+
+        return {
+          opacity: 1,
+          y: 0,
+          x: 0,
+          transition: {
+            duration: 0.7,
+            ease: [0.22, 1, 0.36, 1],
+            delay: i * 0.08
           }
-  };
+        };
+      }
+    };
+  }, [reduce, isDesktop]);
 
   return (
     <>
@@ -57,21 +80,45 @@ export default function HomePage() {
         <h2 className="mb-7 text-2xl font-semibold sm:text-3xl">Authenticity & Care</h2>
 
         <div className="grid gap-4 md:grid-cols-3">
-          {careCards.map((c, i) => (
-            <motion.article
-              key={c.title}
-              className="glass rounded-2xl p-6 transition-colors hover:border-gold/35"
-              custom={i}
-              variants={careItem}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.45, margin: '0px 0px -10% 0px' }}
-              whileHover={reduce ? undefined : { y: -4 }}
-            >
-              <h3 className="mb-3 text-lg font-medium text-stone-100">{c.title}</h3>
-              <p className="text-sm leading-relaxed text-stone-300">{c.desc}</p>
-            </motion.article>
-          ))}
+          {careCards.map((c, i) => {
+            const settled = !!careSettled[c.title];
+
+            // Once settled, render a plain <article> (no transform layer => no blur)
+            if (settled) {
+              return (
+                <article key={c.title} className="glass rounded-2xl p-6 transition-colors hover:border-gold/35">
+                  <h3 className="mb-3 text-lg font-medium text-stone-100">{c.title}</h3>
+                  <p className="text-sm leading-relaxed text-stone-300">{c.desc}</p>
+                </article>
+              );
+            }
+
+            return (
+              <motion.article
+                key={c.title}
+                className="glass rounded-2xl p-6 transition-colors hover:border-gold/35"
+                custom={i}
+                variants={careItem}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.45, margin: '0px 0px -10% 0px' }}
+                whileHover={reduce ? undefined : { y: -4 }}
+                // When it enters view, schedule a "settle" after the animation finishes
+                onViewportEnter={() => {
+                  // Only needed on desktop (mobile is already perfect)
+                  if (!isDesktop) return;
+                  // duration (0.7) + max delay (0.16) ~ 860ms
+                  window.setTimeout(() => {
+                    setCareSettled((s) => ({ ...s, [c.title]: true }));
+                  }, 900);
+                }}
+                style={{ willChange: 'transform, opacity' }}
+              >
+                <h3 className="mb-3 text-lg font-medium text-stone-100">{c.title}</h3>
+                <p className="text-sm leading-relaxed text-stone-300">{c.desc}</p>
+              </motion.article>
+            );
+          })}
         </div>
       </section>
 
