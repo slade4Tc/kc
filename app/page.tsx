@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Hero } from '@/components/Hero';
 import { FeaturedSection } from '@/components/FeaturedSection';
 import { FeaturedGrailsHero } from '@/components/FeaturedGrailsHero';
@@ -12,6 +12,36 @@ export default function HomePage() {
   const featuredCards = getFeaturedCards();
   const categories = getCategoryCounts();
   const newest = getNewestCards();
+  const reduce = useReducedMotion();
+
+  const careCards = [
+    { title: 'Grading', desc: 'Every card is verified with matching serials and grading company records.' },
+    { title: 'Storage', desc: 'Humidity-controlled, UV-safe handling from archive intake to shipment.' },
+    { title: 'Shipping', desc: 'Double-boxed insured dispatch with signature confirmation worldwide.' }
+  ] as const;
+
+  // Scroll-trigger “build up from sides”
+  const careItem = {
+    hidden: (i: number) =>
+      reduce
+        ? { opacity: 0, y: 10 }
+        : {
+            opacity: 0,
+            y: 14,
+            x: i % 2 === 0 ? -28 : 28,
+            filter: 'blur(6px)'
+          },
+    show: (i: number) =>
+      reduce
+        ? { opacity: 1, y: 0, transition: { duration: 0.3 } }
+        : {
+            opacity: 1,
+            y: 0,
+            x: 0,
+            filter: 'blur(0px)',
+            transition: { duration: 0.55, ease: [0.21, 0.8, 0.24, 1], delay: i * 0.08 }
+          }
+  };
 
   return (
     <>
@@ -19,25 +49,37 @@ export default function HomePage() {
       <FeaturedGrailsHero cards={featuredCards} />
       <CategorySection categories={categories} />
 
+      {/* Authenticity & Care (scroll-trigger) */}
       <section className="py-14 sm:py-16">
         <h2 className="mb-7 text-2xl font-semibold sm:text-3xl">Authenticity & Care</h2>
+
         <div className="grid gap-4 md:grid-cols-3">
-          {[
-            ['Grading', 'Every card is verified with matching serials and grading company records.'],
-            ['Storage', 'Humidity-controlled, UV-safe handling from archive intake to shipment.'],
-            ['Shipping', 'Double-boxed insured dispatch with signature confirmation worldwide.']
-          ].map(([title, desc]) => (
-            <article key={title} className="glass rounded-2xl p-6">
-              <h3 className="mb-3 text-lg font-medium text-stone-100">{title}</h3>
-              <p className="text-sm leading-relaxed text-stone-300">{desc}</p>
-            </article>
+          {careCards.map((c, i) => (
+            <motion.article
+              key={c.title}
+              className="glass rounded-2xl p-6"
+              custom={i}
+              variants={careItem}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.35, margin: '0px 0px -10% 0px' }}
+            >
+              <h3 className="mb-3 text-lg font-medium text-stone-100">{c.title}</h3>
+              <p className="text-sm leading-relaxed text-stone-300">{c.desc}</p>
+            </motion.article>
           ))}
         </div>
       </section>
 
       <FeaturedSection cards={newest} title="New Additions" />
 
-      <motion.section className="py-16" initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.75 }} variants={fadeUp}>
+      <motion.section
+        className="py-16"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 1 }}
+        variants={fadeUp}
+      >
         <div className="grid gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:grid-cols-2 md:p-10">
           <div className="space-y-4">
             <p className="text-xs uppercase tracking-[0.24em] text-gold">Collector Story</p>
