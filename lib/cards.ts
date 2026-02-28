@@ -55,15 +55,24 @@ export function getGradeList() {
 
 export function filterCards(input: Card[], filters: CardFilters) {
   const search = filters.search.toLowerCase().trim();
+
   return input
     .filter((card) => {
-      if (search && !`${card.name} ${card.subtitle}`.toLowerCase().includes(search)) return false;
+      const haystack = `${card.id} ${card.name} ${card.subtitle ?? ''}`.toLowerCase();
+      const normalizedSearch = search.replace(/[\s-]+/g, '');
+      const normalizedHaystack = haystack.replace(/[\s-]+/g, '');
+
+      if (search && !haystack.includes(search) && !normalizedHaystack.includes(normalizedSearch)) return false;
       if (filters.category !== 'all' && card.category !== filters.category) return false;
       if (filters.status !== 'all' && card.status !== filters.status) return false;
       if (filters.grade !== 'all' && card.grade !== filters.grade) return false;
       return true;
     })
-    .sort((a, b) => (filters.sort === 'title-asc' ? a.name.localeCompare(b.name) : +new Date(b.updatedAt) - +new Date(a.updatedAt)));
+    .sort((a, b) =>
+      filters.sort === 'title-asc'
+        ? a.name.localeCompare(b.name)
+        : +new Date(b.updatedAt) - +new Date(a.updatedAt)
+    );
 }
 
 export function getCategoryCounts() {
