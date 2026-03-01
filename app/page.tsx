@@ -27,6 +27,7 @@ export default function HomePage() {
   const featuredCards = getFeaturedCards();
   const categories = getCategoryCounts();
   const newest = getNewestCards();
+
   const reduce = useReducedMotion();
   const isDesktop = useIsDesktop(768);
 
@@ -40,25 +41,57 @@ export default function HomePage() {
     []
   );
 
-  // Children: side enter on desktop, keep your mobile vibe
+  /**
+   * B order:
+   * - Left (i=0) and Right (i=2) animate together
+   * - Middle (i=1) animates AFTER
+   */
+  const phase = (i: number) => (i === 1 ? 1 : 0);
+
+  /**
+   * KEY FIXES:
+   * 1) Keep your perfect MOBILE animation exactly.
+   * 2) Make DESKTOP truly come-from-sides.
+   * 3) If reduce-motion is ON on desktop, DO NOT fall back to small fade-up.
+   *    Still do side enter, just softer + faster.
+   * 4) NO blur filters at all (prevents stuck-blur).
+   */
   const careItem = {
     hidden: (i: number) => {
-      if (reduce) return { opacity: 0, y: 10 };
+      // PERFECT MOBILE (exactly as you had it)
+      const mobileX = i === 0 ? -90 : i === 2 ? 90 : 0;
+      const mobileY = i === 1 ? 18 : 10;
 
-      if (isDesktop) {
-        // stronger side enter on desktop
-        const x = i === 0 ? -260 : i === 2 ? 260 : 0;
-        const y = i === 1 ? 18 : 6;
-        return { opacity: 0, x, y };
+      // DESKTOP (stronger from outside)
+      const desktopX = i === 0 ? -260 : i === 2 ? 260 : 0;
+      const desktopY = i === 1 ? 18 : 6;
+
+      // Choose base targets by viewport
+      const x = isDesktop ? desktopX : mobileX;
+      const y = isDesktop ? desktopY : mobileY;
+
+      // IMPORTANT: Even if reduce-motion is ON, keep side-enter (so desktop won't look like mini fade-up)
+      if (reduce) {
+        // softer distance + quicker, but still from sides
+        const reducedX =
+          x === 0 ? 0 : Math.sign(x) * (isDesktop ? 140 : 70); // desktop softer than 260, mobile softer than 90
+        const reducedY = isDesktop ? 10 : 12;
+        return { opacity: 0, x: reducedX, y: reducedY };
       }
 
-      // mobile (your "perfect"): side + slight y
-      const x = i === 0 ? -90 : i === 2 ? 90 : 0;
-      const y = i === 1 ? 18 : 10;
       return { opacity: 0, x, y };
     },
-    show: () => {
-      if (reduce) return { opacity: 1, x: 0, y: 0, transition: { duration: 0.25 } };
+
+    show: (i: number) => {
+      if (reduce) {
+        return {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] }
+        };
+      }
+
       return {
         opacity: 1,
         x: 0,
@@ -67,17 +100,6 @@ export default function HomePage() {
       };
     }
   };
-
-  /**
-   * B order:
-   * - Left (i=0) and Right (i=2) animate together
-   * - Middle (i=1) animates AFTER
-   *
-   * We do this by giving a "phase":
-   * left/right => phase 0
-   * middle     => phase 1
-   */
-  const phase = (i: number) => (i === 1 ? 1 : 0);
 
   return (
     <>
@@ -101,7 +123,7 @@ export default function HomePage() {
               className="glass rounded-2xl p-6 transition-colors hover:border-gold/35"
               custom={i}
               variants={careItem}
-              // phase-based delay: left/right together, middle after
+              // B order: left+right together, then middle
               transition={
                 reduce
                   ? undefined
