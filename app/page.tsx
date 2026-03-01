@@ -30,7 +30,7 @@ export default function Home() {
   const isDesktop = useIsDesktop();
 
   const featured = useMemo(() => getFeaturedCards(), []);
-  const newest = useMemo(() => getNewestCards(6), []);
+  const newest = useMemo(() => getNewestCards(), []);
   const counts = useMemo(() => getCategoryCounts(), []);
 
   const section = fadeUp(reduceMotion);
