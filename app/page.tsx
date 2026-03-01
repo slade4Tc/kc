@@ -49,9 +49,8 @@ export default function Home() {
       <section className="relative px-4 pt-10 md:pt-14">
         <div className="mx-auto w-full max-w-6xl">
           <FeaturedSection
-            title="New Additions"
-            subtitle="Fresh arrivals from across our collection."
-            cards={newest}
+          title="New Additions"
+          cards={newest}
           />
         </div>
       </section>
