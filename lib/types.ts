@@ -14,7 +14,13 @@ export interface Card {
   serial?: string;
   tags?: string[];
   notes?: string[];
+
+  // NEW: R2 key (relative path), e.g. "Cards/charizard.png"
+  imageKey?: string;
+
+  // The URL used by the UI (we will auto-build this from imageKey in lib/cards.ts)
   frontImage: string;
+
   description: string;
   updatedAt: string;
   featuredRank?: number;
