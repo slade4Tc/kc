@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-black text-white antialiased overflow-x-hidden">
+      <body className="text-stone-100">
         <Navbar />
-        {children}
+        <main className="mx-auto min-h-screen w-full max-w-7xl px-4 pb-20 pt-24 sm:px-6 lg:px-8">{children}</main>
         <Footer />
       </body>
     </html>
