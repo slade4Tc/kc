@@ -1,6 +1,7 @@
 import cardsData from '@/data/cards.json';
 import { categoriesConfig } from '@/config/categories';
 import { Card, CardCategory, CardFilters, CardStatus } from '@/lib/types';
+import { resolveImageSrc } from '@/lib/media';
 
 const categorySet = new Set<CardCategory>(['pokemon', 'soccer', 'nfl', 'one-piece', 'misc-sports', 'marvel']);
 
@@ -18,7 +19,11 @@ function normalizeCategory(category?: string): CardCategory {
 const cards: Card[] = (cardsData as RawCard[]).map((card) => ({
   ...card,
   status: normalizeStatus(card.status),
-  category: normalizeCategory(card.category)
+  category: normalizeCategory(card.category),
+
+  // ✅ Convert relative paths (e.g. "Cards/Pokemon/charizard.webp") to full URL
+  // ✅ Keep full URLs as-is if you still have some in JSON
+  frontImage: resolveImageSrc(card.frontImage)
 }));
 
 export function getCards() {
