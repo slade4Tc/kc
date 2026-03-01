@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Hero } from '@/components/Hero';
 import { FeaturedSection } from '@/components/FeaturedSection';
 import { FeaturedGrailsHero } from '@/components/FeaturedGrailsHero';
@@ -26,14 +26,13 @@ function useIsDesktop(breakpointPx = 768) {
 }
 
 export default function Home() {
-  const reduceMotion = useReducedMotion();
   const isDesktop = useIsDesktop();
 
   const featured = useMemo(() => getFeaturedCards(), []);
   const newest = useMemo(() => getNewestCards(), []);
   const counts = useMemo(() => getCategoryCounts(), []);
 
-  const section = fadeUp(reduceMotion);
+  const section = fadeUp;
 
   return (
     <main className="relative">
