@@ -41,7 +41,7 @@ export default function Home() {
       {/* Featured grails hero */}
       <section className="relative px-4 pt-10 md:pt-14">
         <div className="mx-auto w-full max-w-6xl">
-          <FeaturedGrailsHero />
+          <FeaturedGrailsHero cards={featured} />
         </div>
       </section>
 
