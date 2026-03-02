@@ -46,15 +46,21 @@ export function CategorySection({ categories }: { categories: CategoryItem[] }) 
                   <div className="h-full w-full bg-gradient-to-br from-[#302718] via-[#1e1e1e] to-[#141414]" />
                 )}
 
-                {/* Classic overlay (as old version) */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />
+              </div>
+
+              {/* Gold shine sweep (KC-main style) */}
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute inset-0 -translate-x-[120%] bg-gradient-to-r from-transparent via-[rgb(var(--gold)/0.22)] to-transparent transition duration-700 group-hover:translate-x-[130%]" />
               </div>
 
               <div className="relative flex min-h-[170px] flex-col justify-end p-6">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <h3 className="text-lg font-semibold">{cat.label}</h3>
-                    {cat.description ? <p className="mt-1 text-sm text-stone-300">{cat.description}</p> : null}
+                    {cat.description ? (
+                      <p className="mt-1 text-sm text-stone-300">{cat.description}</p>
+                    ) : null}
                   </div>
                   <div className="rounded-full border border-white/10 bg-black/40 px-3 py-1 text-xs text-stone-200">
                     {cat.count}
