@@ -58,23 +58,17 @@ export default function HomePage() {
    */
   const careItem = {
     hidden: (i: number) => {
-      // PERFECT MOBILE (exactly as you had it)
       const mobileX = i === 0 ? -90 : i === 2 ? 90 : 0;
       const mobileY = i === 1 ? 18 : 10;
 
-      // DESKTOP (stronger from outside)
       const desktopX = i === 0 ? -260 : i === 2 ? 260 : 0;
       const desktopY = i === 1 ? 18 : 6;
 
-      // Choose base targets by viewport
       const x = isDesktop ? desktopX : mobileX;
       const y = isDesktop ? desktopY : mobileY;
 
-      // IMPORTANT: Even if reduce-motion is ON, keep side-enter (so desktop won't look like mini fade-up)
       if (reduce) {
-        // softer distance + quicker, but still from sides
-        const reducedX =
-          x === 0 ? 0 : Math.sign(x) * (isDesktop ? 140 : 70); // desktop softer than 260, mobile softer than 90
+        const reducedX = x === 0 ? 0 : Math.sign(x) * (isDesktop ? 140 : 70);
         const reducedY = isDesktop ? 10 : 12;
         return { opacity: 0, x: reducedX, y: reducedY };
       }
@@ -108,14 +102,16 @@ export default function HomePage() {
       <CategorySection categories={categories} />
 
       {/* Authenticity & Care (scroll-trigger) */}
-      <section className="py-14 sm:py-16">
+      {/* IMPORTANT: overflow-hidden prevents mobile scroll-jank from side-enter transforms */}
+      <section className="py-14 sm:py-16 overflow-hidden">
         <h2 className="mb-7 text-2xl font-semibold sm:text-3xl">Authenticity & Care</h2>
 
         <motion.div
-          className="grid gap-4 md:grid-cols-3"
+          className="grid gap-4 md:grid-cols-3 overflow-hidden"
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.45, margin: '0px 0px -10% 0px' }}
+          /* IMPORTANT: remove negative margin to avoid viewport-trigger jitter on mobile */
+          viewport={{ once: true, amount: 0.35 }}
         >
           {careCards.map((c, i) => (
             <motion.article
@@ -123,7 +119,6 @@ export default function HomePage() {
               className="glass rounded-2xl p-6 transition-colors hover:border-gold/35"
               custom={i}
               variants={careItem}
-              // B order: left+right together, then middle
               transition={
                 reduce
                   ? undefined
