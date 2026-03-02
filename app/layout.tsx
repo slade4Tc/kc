@@ -3,6 +3,7 @@ import './globals.css';
 import { siteConfig } from '@/config/site';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import SplashGate from '@/components/SplashGate';
 
 export const metadata: Metadata = {
   title: siteConfig.name,
