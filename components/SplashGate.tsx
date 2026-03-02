@@ -7,12 +7,34 @@ type Props = {
   ms?: number; // default 2000
 };
 
+const KEY = 'kc_splash_shown_v1';
+
 export default function SplashGate({ children, ms = 2000 }: Props) {
-  const [show, setShow] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  const [show, setShow] = useState(false);
   const [fade, setFade] = useState(false);
 
   useEffect(() => {
-    // Start fade λίγο πριν κλείσει (για να φαίνεται smooth)
+    setMounted(true);
+
+    // Show only once per session
+    try {
+      const already = sessionStorage.getItem(KEY);
+      if (already === '1') {
+        setShow(false);
+        return;
+      }
+      sessionStorage.setItem(KEY, '1');
+      setShow(true);
+    } catch {
+      // If storage is blocked, fallback to showing once (per mount)
+      setShow(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!show) return;
+
     const t1 = window.setTimeout(() => setFade(true), Math.max(0, ms - 350));
     const t2 = window.setTimeout(() => setShow(false), ms);
 
@@ -20,13 +42,14 @@ export default function SplashGate({ children, ms = 2000 }: Props) {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
     };
-  }, [ms]);
+  }, [show, ms]);
 
   return (
     <>
       {children}
 
-      {show && (
+      {/* Prevent hydration flash: don't render overlay until mounted */}
+      {mounted && show && (
         <div
           aria-hidden="true"
           className={[
@@ -38,7 +61,6 @@ export default function SplashGate({ children, ms = 2000 }: Props) {
           ].join(' ')}
         >
           <div className="w-full max-w-[520px] px-6 text-center">
-            {/* Logo / Title */}
             <div className="text-5xl sm:text-6xl font-semibold tracking-tight">
               <span className="text-sky-400">Kroba</span>
               <span className="text-amber-400">Cards</span>
@@ -48,13 +70,11 @@ export default function SplashGate({ children, ms = 2000 }: Props) {
               ΦΟΡΤΩΣΗ
             </div>
 
-            {/* Progress bar (fake) */}
             <div className="mt-6 h-[6px] w-full overflow-hidden rounded-full bg-white/10">
               <div
                 className="h-full w-full origin-left animate-[kcbar_2s_linear_forwards] rounded-full"
                 style={{
-                  background:
-                    'linear-gradient(90deg, #38bdf8 0%, #f59e0b 100%)',
+                  background: 'linear-gradient(90deg, #38bdf8 0%, #f59e0b 100%)',
                 }}
               />
             </div>
@@ -62,7 +82,6 @@ export default function SplashGate({ children, ms = 2000 }: Props) {
             <div className="mt-3 text-[11px] text-white/35">100%</div>
           </div>
 
-          {/* Simple vignette like your screenshot */}
           <div
             className="pointer-events-none absolute inset-0 opacity-80"
             style={{
@@ -73,7 +92,6 @@ export default function SplashGate({ children, ms = 2000 }: Props) {
         </div>
       )}
 
-      {/* keyframes inline (tailwind arbitrary animation needs keyframes in globals, so we add a tiny style tag) */}
       <style jsx global>{`
         @keyframes kcbar {
           from {
