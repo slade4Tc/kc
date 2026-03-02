@@ -26,19 +26,20 @@ function FeaturedRowCard({ card }: { card: Card }) {
       whileHover={reduce ? 'rest' : 'hover'}
       whileTap={reduce ? 'rest' : 'tap'}
       variants={hoverLift}
-      className="w-[180px] shrink-0 snap-start overflow-hidden rounded-2xl border border-white/10 bg-[#151515]/80 shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
+      className={[
+        // ✅ Mobile stays reasonable, Desktop grows so ~4 fit
+        'w-[170px] xs:w-[185px] sm:w-[220px] lg:w-[260px] xl:w-[275px]',
+        'shrink-0 snap-start overflow-hidden rounded-2xl',
+        'border border-white/10 bg-[#151515]/80',
+        'shadow-[0_10px_30px_rgba(0,0,0,0.35)]'
+      ].join(' ')}
     >
       <Link href={`/cards/${card.id}`} className="block">
         <div className="relative aspect-[4/5] overflow-hidden bg-stone-900">
           <motion.div variants={hoverImageZoom} className="h-full w-full">
-            <ImageWithFallback
-              src={card.frontImage}
-              alt={card.name}
-              className="h-full w-full object-cover"
-            />
+            <ImageWithFallback src={card.frontImage} alt={card.name} className="h-full w-full object-cover" />
           </motion.div>
 
-          {/* Badge: always readable on top of images */}
           <span
             className={[
               'pointer-events-none absolute right-2 top-2 z-20 inline-flex items-center gap-1',
@@ -52,11 +53,10 @@ function FeaturedRowCard({ card }: { card: Card }) {
             {statusText[card.status]}
           </span>
 
-          {/* subtle top gradient so text/badge never fights highlights */}
           <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-black/55 to-transparent" />
         </div>
 
-        <div className="p-3">
+        <div className="p-3 sm:p-4">
           <p className="truncate text-sm font-medium text-stone-100">{card.name}</p>
           <p className="mt-1 text-xs tracking-[0.16em] text-stone-400">{card.id}</p>
         </div>
@@ -68,17 +68,14 @@ function FeaturedRowCard({ card }: { card: Card }) {
 export function FeaturedGrailsHero({ cards }: { cards: Card[] }) {
   return (
     <section className="py-10 sm:py-12">
-      <div className="rounded-3xl border border-gold/25 bg-gradient-to-br from-[#2b2418]/75 via-[#171717]/90 to-[#111111]/95 p-5 shadow-glow backdrop-blur-xl sm:p-7">
-        <h2 className="mb-4 text-3xl font-semibold text-stone-100 sm:text-4xl">
-          Featured
-        </h2>
+      <div className="rounded-3xl border border-gold/25 bg-gradient-to-br from-[#2b2418]/75 via-[#171717]/90 to-[#111111]/95 p-5 sm:p-8 shadow-glow backdrop-blur-xl">
+        <h2 className="mb-5 text-3xl font-semibold text-stone-100 sm:text-4xl">Featured</h2>
 
         <div className="relative">
-          {/* fade edges */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-[#151515]/70 to-transparent" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-[#151515]/70 to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 sm:w-12 bg-gradient-to-r from-[#151515]/70 to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 sm:w-12 bg-gradient-to-l from-[#151515]/70 to-transparent" />
 
-          <div className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2">
+          <div className="no-scrollbar flex snap-x snap-mandatory gap-4 sm:gap-5 overflow-x-auto pb-3">
             {cards.map((card) => (
               <FeaturedRowCard key={card.id} card={card} />
             ))}
