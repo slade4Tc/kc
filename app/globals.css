@@ -103,14 +103,14 @@ body::after {
   }
 }
 
-/* Ensure app content stays above overlays */
-main,
-header,
-footer,
-section,
-div {
+/* Keep grain/vignette behind everything without breaking Tailwind positioning */
+body {
   position: relative;
-  z-index: 1;
+}
+
+body::before,
+body::after {
+  z-index: -1;
 }
 
 /* Existing helper */
