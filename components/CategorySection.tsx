@@ -33,14 +33,15 @@ export function CategorySection({ categories }: { categories: CategoryItem[] }) 
           >
             <Link
               href={`/collections/${cat.slug}`}
-              className="group relative block overflow-hidden rounded-2xl border border-white/10 active:scale-[0.99]"
+              className="group relative block overflow-hidden rounded-2xl border border-white/10 active:scale-[0.99]
+              h-[140px] sm:h-[160px] md:h-[180px] lg:h-[200px]"
             >
               <div className="absolute inset-0">
                 {cat.imageUrl ? (
                   <ImageWithFallback
                     src={resolveImageSrc(cat.imageUrl)}
                     alt={cat.label}
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                    className="h-full w-full object-cover object-[50%_35%] sm:object-center transition duration-500 group-hover:scale-[1.03]"
                   />
                 ) : (
                   <div className="h-full w-full bg-gradient-to-br from-[#302718] via-[#1e1e1e] to-[#141414]" />
@@ -54,7 +55,7 @@ export function CategorySection({ categories }: { categories: CategoryItem[] }) 
                 <div className="absolute inset-0 -translate-x-[120%] bg-gradient-to-r from-transparent via-[rgb(var(--gold)/0.22)] to-transparent transition duration-700 group-hover:translate-x-[130%]" />
               </div>
 
-              <div className="relative flex min-h-[170px] flex-col justify-end p-6">
+              <div className="relative flex h-full flex-col justify-end p-5 sm:p-6">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <h3 className="text-lg font-semibold">{cat.label}</h3>
