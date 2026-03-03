@@ -11,7 +11,6 @@ const KEY = 'kc_splash_shown_v1';
 const LOGO_SRC = '/KC_logo.png';
 
 export default function SplashGate({ children, ms = 4000 }: Props) {
-  const [ready, setReady] = useState(false);
   const [show, setShow] = useState(false);
   const [fade, setFade] = useState(false);
 
@@ -28,8 +27,8 @@ export default function SplashGate({ children, ms = 4000 }: Props) {
       shouldShow = true;
     }
 
-    if (!shouldShow) {
-      setReady(true);
+    if (!shouldShow || ms <= 0) {
+      setShow(false);
       return;
     }
 
@@ -38,7 +37,6 @@ export default function SplashGate({ children, ms = 4000 }: Props) {
     const t1 = window.setTimeout(() => setFade(true), Math.max(0, ms - 350));
     const t2 = window.setTimeout(() => {
       setShow(false);
-      setReady(true);
     }, ms);
 
     return () => {
@@ -47,11 +45,12 @@ export default function SplashGate({ children, ms = 4000 }: Props) {
     };
   }, [ms]);
 
-  if (!ready && !show) return null;
-
   return (
     <>
-      {!ready && show && (
+      {/* IMPORTANT: children mounted immediately so images start loading instantly */}
+      {children}
+
+      {show && (
         <div
           aria-hidden="true"
           style={cssVars}
@@ -61,6 +60,8 @@ export default function SplashGate({ children, ms = 4000 }: Props) {
             'bg-[#070606]',
             'transition-opacity duration-300',
             fade ? 'opacity-0' : 'opacity-100',
+            // while fading, don't block clicks after it's almost gone
+            fade ? 'pointer-events-none' : 'pointer-events-auto',
           ].join(' ')}
         >
           {/* Premium background layers (gold/charcoal only) */}
@@ -69,11 +70,9 @@ export default function SplashGate({ children, ms = 4000 }: Props) {
               className="absolute inset-0"
               style={{
                 background:
-                  // warm gold pools + deep vignette
                   'radial-gradient(1200px 700px at 18% 22%, rgba(210,170,95,0.14) 0%, rgba(0,0,0,0) 55%), radial-gradient(1100px 700px at 82% 78%, rgba(210,170,95,0.16) 0%, rgba(0,0,0,0) 60%), radial-gradient(900px 600px at 50% 50%, rgba(255,255,255,0.045) 0%, rgba(0,0,0,0) 58%), linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.65) 100%)',
               }}
             />
-            {/* subtle grain */}
             <div
               className="absolute inset-0 opacity-[0.08] mix-blend-overlay"
               style={{
@@ -81,7 +80,6 @@ export default function SplashGate({ children, ms = 4000 }: Props) {
                   'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27160%27 height=%27160%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27160%27 height=%27160%27 filter=%27url(%23n)%27 opacity=%270.45%27/%3E%3C/svg%3E")',
               }}
             />
-            {/* edge vignette */}
             <div
               className="absolute inset-0 opacity-90"
               style={{
@@ -128,7 +126,6 @@ export default function SplashGate({ children, ms = 4000 }: Props) {
 
           <style jsx global>{`
             .kc-bar {
-              /* GOLD ONLY — no blue */
               background: linear-gradient(
                 90deg,
                 rgba(210, 170, 95, 0.12) 0%,
@@ -148,8 +145,6 @@ export default function SplashGate({ children, ms = 4000 }: Props) {
           `}</style>
         </div>
       )}
-
-      {ready && children}
     </>
   );
 }
