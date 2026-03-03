@@ -14,8 +14,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="text-stone-100">
-        {/* Keep all app content above body overlays WITHOUT breaking positioning */}
-        <div className="relative z-10">
+        {/* App wrapper ABOVE background overlays + prevent horizontal jank (Safari-safe) */}
+        <div className="relative z-10 overflow-x-hidden">
           <SplashGate ms={4000}>
             <Navbar />
             <main className="mx-auto min-h-screen w-full max-w-7xl px-4 pb-20 pt-24 sm:px-6 lg:px-8">
